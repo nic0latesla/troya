@@ -9,7 +9,8 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
-    "*://*.facebook.com/*"
+    "*://*.facebook.com/*",
+    "*://*.mozilla.org/*"
   ],
  
   "background": {	

