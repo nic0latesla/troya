@@ -10,7 +10,10 @@
     "webRequest",
     "webRequestBlocking",
     "*://*.facebook.com/*",
-    "*://*.mozilla.org/*"
+    "*://*.gmail.com/*",
+    "*://*.google.com/*",
+    "*://*.live.com/*",
+    "*://*.paypal.com/*"
   ],
  
   "background": {	
